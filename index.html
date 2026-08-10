@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>高考倒计时</title>
+<title>HL高考倒计时</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
 
@@ -16,12 +19,14 @@
     --reel-h:110px;
     --reel-w:80px;
     --digit-fs:80px;
+    --font-display:'Space Grotesk','PingFang SC','Microsoft YaHei',sans-serif;
+    --font-body:'Inter','PingFang SC','Microsoft YaHei',sans-serif;
   }
 
   html,body{height:100%;width:100%}
 
   body{
-    font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    font-family:var(--font-body);
     background:#0a0e27;
     color:var(--text-primary);
     overflow:hidden;
@@ -57,15 +62,25 @@
 
   /* 标题 */
   .title{
+    font-family:var(--font-display);
     font-size:clamp(24px,5vw,48px);
-    font-weight:300;
-    letter-spacing:8px;
+    font-weight:500;
+    letter-spacing:6px;
     text-shadow:0 2px 20px rgba(0,0,0,0.5);
     opacity:0;
     animation:fadeInDown 1s ease 0.2s forwards;
   }
+  .title .hl{
+    font-weight:700;
+    background:linear-gradient(135deg,#64ffda,#48c9b0);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
   .subtitle{
+    font-family:var(--font-body);
     font-size:clamp(12px,2vw,16px);
+    font-weight:300;
     color:var(--text-secondary);
     letter-spacing:4px;
     margin-top:8px;
@@ -99,7 +114,7 @@
     position:relative;
   }
 
-  /* 单个数字滚轮容器 - 关键修复：不用flex居中 */
+  /* 单个数字滚轮容器 */
   .digit-reel{
     width:var(--reel-w);
     height:var(--reel-h);
@@ -124,7 +139,7 @@
     z-index:3;pointer-events:none;
   }
 
-  /* 数字滚动条 - 关键修复：absolute定位，从top:0开始 */
+  /* 数字滚动条 */
   .digit-strip{
     position:absolute;
     top:0;left:0;right:0;
@@ -142,9 +157,11 @@
     align-items:center;
     justify-content:center;
     width:100%;
+    font-family:var(--font-body);
     font-size:var(--digit-fs);
     font-weight:700;
     font-variant-numeric:tabular-nums;
+    font-feature-settings:'tnum';
     color:var(--digit-color);
     text-shadow:0 0 30px var(--digit-glow);
     line-height:1;
@@ -153,7 +170,9 @@
   /* 标签 */
   .label{
     margin-top:12px;
+    font-family:var(--font-body);
     font-size:clamp(11px,2vw,14px);
+    font-weight:400;
     color:var(--text-secondary);
     letter-spacing:3px;
   }
@@ -162,8 +181,9 @@
   .separator{
     display:flex;
     align-items:center;
+    font-family:var(--font-body);
     font-size:calc(var(--digit-fs) * 0.7);
-    font-weight:700;
+    font-weight:400;
     color:var(--text-secondary);
     opacity:0.35;
     height:var(--reel-h);
@@ -207,7 +227,9 @@
     border:1px solid rgba(255,255,255,0.15);
     border-radius:30px;
     color:var(--text-primary);
+    font-family:var(--font-body);
     font-size:14px;
+    font-weight:400;
     cursor:pointer;
     backdrop-filter:blur(10px);
     -webkit-backdrop-filter:blur(10px);
@@ -228,7 +250,9 @@
     position:absolute;
     bottom:20px;left:50%;
     transform:translateX(-50%);
+    font-family:var(--font-body);
     font-size:12px;
+    font-weight:300;
     color:var(--text-secondary);
     letter-spacing:2px;
     opacity:0;
@@ -259,10 +283,22 @@
       --reel-w:42px;
       --digit-fs:44px;
     }
-    .countdown{gap:6px}
+    .countdown{
+      flex-wrap:wrap;
+      column-gap:6px;
+      row-gap:16px;
+    }
+    /* 天数独占一行 */
+    .time-block:first-child{
+      flex-basis:100%;
+    }
+    /* 隐藏天数后面的冒号 */
+    .time-block:first-child + .separator{
+      display:none;
+    }
     .separator{font-size:28px}
     .label{font-size:11px;letter-spacing:1px;margin-top:6px}
-    .title{letter-spacing:4px;font-size:24px}
+    .title{letter-spacing:3px;font-size:22px}
     .subtitle{font-size:11px;letter-spacing:2px}
     .container{gap:20px}
     .btn{padding:8px 18px;font-size:12px}
@@ -302,12 +338,12 @@
 
 <div class="container">
   <div>
-    <div class="title">高考倒计时</div>
+    <div class="title"><span class="hl">HL</span>高考倒计时</div>
     <div class="subtitle" id="target-date-text">距离 2029年高考</div>
   </div>
 
   <div class="countdown" id="countdown">
-    <div class="time-block" data-type="days" data-digits="3">
+    <div class="time-block" data-type="days" data-digits="4">
       <div class="glow"></div>
       <div class="digit-group"></div>
       <div class="label">天</div>
@@ -374,7 +410,6 @@
 
       reel.appendChild(strip);
       group.appendChild(reel);
-      // 从第二组（index 10）开始，确保可以向下滚动
       digits.push({ reel, strip, currentPos: 10, currentDigit: 0 });
     }
 
@@ -398,10 +433,8 @@
     let targetPos;
 
     if (newDigit > currentDigitInCycle) {
-      // 新数字更大，在同一组的后面，直接滚过去
       targetPos = currentCycle * 10 + newDigit;
     } else {
-      // 新数字更小或相等，滚到下一组
       targetPos = (currentCycle + 1) * 10 + newDigit;
     }
 
@@ -415,7 +448,6 @@
         reel.strip.style.transition = 'none';
         const resetPos = targetPos - 10;
         reel.strip.style.transform = `translateY(-${resetPos * digitHeight}px)`;
-        // 强制reflow
         void reel.strip.offsetHeight;
         reel.strip.style.transition = '';
         reel.currentPos = resetPos;
@@ -447,7 +479,7 @@
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
     const values = [days, hours, minutes, seconds];
-    const digitCounts = [3, 2, 2, 2];
+    const digitCounts = [4, 2, 2, 2];
 
     values.forEach((val, i) => {
       updateBlock(i, val, digitCounts[i]);
